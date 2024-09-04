@@ -48,8 +48,8 @@ class ShortURL(db.Model):
         self.expiration_date = datetime.utcnow() + timedelta(days=expiration_days)
 
 @app.route('/')
-def hello_world():
-    return 'Hello, World!'
+def index():
+    return app.send_static_file('index.html')
 
 def generate_short_url():
     characters = string.ascii_letters + string.digits
