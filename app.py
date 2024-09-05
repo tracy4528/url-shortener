@@ -51,6 +51,10 @@ class ShortURL(db.Model):
 def index():
     return app.send_static_file('index.html')
 
+@app.route('/health')
+def health_check():
+    return 'OK', 200
+
 def generate_short_url():
     characters = string.ascii_letters + string.digits
     return ''.join(random.choice(characters) for _ in range(6))
@@ -117,7 +121,7 @@ def redirect_to_url(short_url):
             'reason': 'Invalid short URL'
         }), 404
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)

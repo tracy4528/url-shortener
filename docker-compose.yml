@@ -3,14 +3,15 @@ version: '3.8'
 services:
   web:
     build: .
+    image: tracy4528/flask-url-shortener:latest
     ports:
       - "5000:5000"
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
       - POSTGRES_HOST=db
       - POSTGRES_PORT=5432
-      - POSTGRES_DB=url_shortener
+      - POSTGRES_DB=${POSTGRES_DB:-url_shortener}
     depends_on:
       - db
 
@@ -19,9 +20,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=url_shortener
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_DB=${POSTGRES_DB:-url_shortener}
 
 volumes:
   postgres_data:
