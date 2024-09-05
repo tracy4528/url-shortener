@@ -1,6 +1,6 @@
 import os
 from datetime import datetime, timedelta
-from flask import Flask, request, jsonify, redirect, abort
+from flask import Flask, request, jsonify, redirect
 from flask_sqlalchemy import SQLAlchemy
 import logging
 import string
@@ -61,10 +61,22 @@ def create_short_url():
     original_url = data.get('original_url')
 
     if not original_url:
-        return jsonify({'error': 'Missing original_url'}), 400
+        return jsonify({
+            'success': False,
+            'reason': 'Missing original_url'
+        }), 400
+
+    if len(original_url) > 2048:
+        return jsonify({
+            'success': False,
+            'reason': 'URL too long'
+        }), 400
 
     if not validators.url(original_url):
-        return jsonify({'error': 'Invalid URL'}), 400
+        return jsonify({
+            'success': False,
+            'reason': 'Invalid URL'
+        }), 400
 
     existing_url = ShortURL.query.filter_by(original_url=original_url).first()
     if existing_url:
@@ -95,9 +107,15 @@ def redirect_to_url(short_url):
         if link.expiration_date > datetime.utcnow():
             return redirect(link.original_url)
         else:
-            return jsonify({'error': 'URL has expired'}), 410
+            return jsonify({
+                'success': False,
+                'reason': 'URL has expired'
+            }), 410
     else:
-        abort(404)
+        return jsonify({
+            'success': False,
+            'reason': 'Invalid short URL'
+        }), 404
 
 if __name__ == '__main__':
     with app.app_context():
