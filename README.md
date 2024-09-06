@@ -47,6 +47,8 @@ You should see two services running: `web` and `db`.
 
 5. The URL shortener service should now be accessible at `http://localhost:5000`.
 
+## API document
+[api document](https://github.com/tracy4528/url-shortener/blob/main/api.md)
 ## Usage
 
 - To create a short URL, send a POST request to `http://localhost:5000/shorten` with a JSON body containing the `original_url`:
